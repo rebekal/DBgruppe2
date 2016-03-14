@@ -47,14 +47,23 @@ public class Dagbok {
 	}
 	
 
+	public int setId() throws SQLException {
 
+		query("select max(TRENINGSOKTID) from TRENINGSOKT");
+		int id = 0;
+		
+		while (myRs.next()) {
+			String s = myRs.getString(1);
+			
+			int id2 = Integer.parseInt(s);
+			id += id2 + 1;
+		}
+		return id;
+	}
 
 	public void setTrening() throws SQLException, ParseException{
 		String query1 = "INSERT INTO TRENINGSOKT (TRENINGSOKTID, DATO, TIDSPUNKT, VARIGHET)" + "VALUES (?, ?, ?, ?)";
 		PreparedStatement prepStmt = myConn.prepareStatement(query1);
-		
-		System.out.println("Skriv inn treningsøktid: ");
-		int treningsoktid = in.nextInt();
 		
 		System.out.println("Sett dato (YYYY-MM-DD): ");
 		String datoIn = in.next();
@@ -73,7 +82,7 @@ public class Dagbok {
 		int varighet = in.nextInt();
 		
 		
-		prepStmt.setInt(1, treningsoktid);
+		prepStmt.setInt(1, setId());
 		prepStmt.setDate(2, sqlDato);
 		prepStmt.setTime(3, sqlTid);
 		prepStmt.setInt(4, varighet);
