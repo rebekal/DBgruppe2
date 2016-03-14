@@ -76,7 +76,33 @@ public class Dagbok {
 		prepStmt.executeUpdate();
 		System.out.println("Treningsøkt lagt til!");
 	}
+
+
+	public void setOvelse() throws SQLException{
+		
+		String query1 = "INSERT INTO OVELSE (OVELSESTITTEL, BESKRIVELSE, TYPE_TRENING)" + "VALUES (?,?,?)";
+		PreparedStatement stat1 = myConn.prepareStatement(query1);
+		
+		
+		System.out.println("Skriv inn Øvelsetittel: ");
+		String tittel = in.next();
+		System.out.println("Skriv inn beskrivelse av økten: ");
+		String beskrivelse = in.next();
+		System.out.println("Skriv inn type trening her: ");
+		String typeTrening = in.next();
+		System.out.println("Øvelse lagt til!");
+		
 	
+		stat1.setString(1,tittel);
+		stat1.setString(2, beskrivelse);
+		stat1.setString(3, typeTrening);
+		
+		stat1.executeUpdate();
+		
+		}
+	
+
+
 	public void getTrening() throws SQLException {
 		query("select * from TRENINGSOKT");
 		//Når myResult har en neste, print ut PERSINID og PERSONLIGFORM
@@ -89,5 +115,6 @@ public class Dagbok {
 		Dagbok d = new Dagbok();
 		d.setTrening();
 		d.getTrening();
+		d.setOvelse();
 	}
 }
