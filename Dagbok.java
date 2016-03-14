@@ -100,6 +100,15 @@ public class Dagbok {
 		stat1.executeUpdate();
 		
 		}
+
+
+
+	public static void main(String[] args) throws SQLException {
+		Rebekal r = new Rebekal();
+		//r.setOvelse();
+		r.getOvelse();
+		
+	}
 	
 
 
