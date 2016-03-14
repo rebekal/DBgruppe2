@@ -30,6 +30,8 @@ public class Dagbok {
 		
 	}
 	
+
+	
 	public void query(String sql) {
 		try{
 			/*
@@ -44,6 +46,9 @@ public class Dagbok {
 		}
 	}
 	
+
+
+
 	public void setTrening() throws SQLException, ParseException{
 		String query1 = "INSERT INTO TRENINGSOKT (TRENINGSOKTID, DATO, TIDSPUNKT, VARIGHET)" + "VALUES (?, ?, ?, ?)";
 		PreparedStatement prepStmt = myConn.prepareStatement(query1);
@@ -78,6 +83,19 @@ public class Dagbok {
 	}
 
 
+
+
+	public void getTrening() throws SQLException {
+			query("select * from TRENINGSOKT");
+			//Når myResult har en neste, print ut PERSINID og PERSONLIGFORM
+			while (myRs.next()) {
+				System.out.println("TreningsID: " + myRs.getString("TRENINGSOKTID") + "  Dato: " + myRs.getString("DATO") + "  Tidspunkt: " + myRs.getString("TIDSPUNKT") + "  Varighet: " + myRs.getString("VARIGHET"));
+			}
+		}
+
+
+
+
 	public void setOvelse() throws SQLException{
 		
 		String query1 = "INSERT INTO OVELSE (OVELSESTITTEL, BESKRIVELSE, TYPE_TRENING)" + "VALUES (?,?,?)";
@@ -104,14 +122,15 @@ public class Dagbok {
 
 
 
-
-	public void getTrening() throws SQLException {
-		query("select * from TRENINGSOKT");
-		//Når myResult har en neste, print ut PERSINID og PERSONLIGFORM
+	public void getOvelse()throws SQLException{
+		query("select * from OVELSE");
+		//Når myResult har en neste, print ut OVELSESTITTEL,BESKRIVELSE og TYPE_TRENING
 		while (myRs.next()) {
-			System.out.println("TreningsID: " + myRs.getString("TRENINGSOKTID") + "  Dato: " + myRs.getString("DATO") + "  Tidspunkt: " + myRs.getString("TIDSPUNKT") + "  Varighet: " + myRs.getString("VARIGHET"));
+			System.out.println("Øvelsestittel: " + myRs.getString("OVELSESTITTEL") + "  Beskrivelse: " + myRs.getString("BESKRIVELSE") + "  Type trening: " + myRs.getString("TYPE_TRENING"));
 		}
-	}
+
+
+	
 	
 	public static void main(String[] args) throws SQLException, ParseException {
 		Dagbok d = new Dagbok();
