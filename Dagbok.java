@@ -107,22 +107,38 @@ public class Dagbok {
 
 	public void setOvelse() throws SQLException{
 		
-		String query1 = "INSERT INTO OVELSE (OVELSESTITTEL, BESKRIVELSE, TYPE_TRENING)" + "VALUES (?,?,?)";
+		String query1 = "INSERT INTO OVELSE (OVELSESTITTEL, PERSFORM, BESKRIVELSE, TYPE_TRENING, BELASTNING, ANTALL_REPETISJONER, ANTALL_SETT, VARIGHET)" + "VALUES (?,?,?,?,?,?,?,?)";
 		PreparedStatement stat1 = myConn.prepareStatement(query1);
 		
-		
+		//query("select TRENINGSOKTID from TRENINGSOKT);"
+		//String treningsoktid = 
 		System.out.println("Skriv inn Øvelsetittel: ");
 		String tittel = in.next();
+		System.out.println("Skriv inn personlig form: ");
+		String persForm = in.next();
 		System.out.println("Skriv inn beskrivelse av økten: ");
 		String beskrivelse = in.next();
 		System.out.println("Skriv inn type trening her: ");
 		String typeTrening = in.next();
+		System.out.println("Grad av belastning: ");
+		String belastning = in.next();
+		System.out.println("Skriv inn antall repetisjoner: ");
+		String ant_rep = in.next();
+		System.out.println("Skriv inn antall sett: ");
+		String ant_set = in.next();
+		System.out.println("Skriv inn varigheten for øvelsen: ");
+		String varighet = in.next();
 		System.out.println("Øvelse lagt til!");
 		
 	
 		stat1.setString(1,tittel);
-		stat1.setString(2, beskrivelse);
-		stat1.setString(3, typeTrening);
+		stat1.setString(2, persForm);
+		stat1.setString(3, beskrivelse);
+		stat1.setString(4, typeTrening);
+		stat1.setString(5, belastning);
+		stat1.setString(6, ant_rep);
+		stat1.setString(7, ant_set);
+		stat1.setString(8, varighet);
 		
 		stat1.executeUpdate();
 		
@@ -133,11 +149,23 @@ public class Dagbok {
 
 	public void getOvelse()throws SQLException{
 		query("select * from OVELSE");
+		System.out.println("Dette er alle de tidligere øvelsene: ");
 		//Når myResult har en neste, print ut OVELSESTITTEL,BESKRIVELSE og TYPE_TRENING
 		while (myRs.next()) {
-			System.out.println("Øvelsestittel: " + myRs.getString("OVELSESTITTEL") + "  Beskrivelse: " + myRs.getString("BESKRIVELSE") + "  Type trening: " + myRs.getString("TYPE_TRENING"));
+			System.out.println("Øvelsestittel: " + myRs.getString("OVELSESTITTEL") + "Personlig Form: " + myRs.getString("PERSFORM") +  "Beskrivelse: " + myRs.getString("BESKRIVELSE") + "  Type trening: " + myRs.getString("TYPE_TRENING")+ "Belastning: " + myRs.getString("BELASTNING") + "Antall Repetisjoner: " + myRs.getString("ANTALL_REPETISJONER") + "Antall Sett: " + myRs.getString("ANTALL_SETT") + "Varighet: " + myRs.getString("VARIGHET"));
 		}
-
+		
+		System.out.println(' ');
+		System.out.println("Hvilken øvelse vil du hente ut? (velg fra øvelsestitler i listen over): ");
+		String valgt = in.next();
+		query("select OVELSESTITTEL, PERSFORM, BESKRIVELSE, TYPE_TRENING, BELASTNING, ANTALL_REPETISJONER, ANTALL_SETT, VARIGHET  from OVELSE where OVELSESTITTEL ='" + valgt + "'");
+		while (myRs.next()){
+		System.out.println("Øvelsestittel: " + myRs.getString("OVELSESTITTEL") + "  Beskrivelse: " + myRs.getString("BESKRIVELSE") + "  Type trening: " + myRs.getString("TYPE_TRENING")+ "Belastning: " + myRs.getString("BELASTNING") + "Antall Repetisjoner: " + myRs.getString("ANTALL_REPETISJONER") + "Antall Sett: " + myRs.getString("ANTALL_SETT") + "Varighet: " + myRs.getString("VARIGHET"));
+		}
+		/*
+		 * Lager statements som matcher øvelseNavn i database
+		 */
+	}
 
 	
 	
