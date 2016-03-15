@@ -61,6 +61,20 @@ public class Dagbok {
 		return id;
 	}
 
+	public int getLastId() throws SQLException {
+
+		query("select max(TRENINGSOKTID) from TRENINGSOKT");
+		int id = 0;
+		
+		while (myRs.next()) {
+			String s = myRs.getString(1);
+			
+			int id2 = Integer.parseInt(s);
+			id += id2;
+		}
+		return id;
+	}
+	
 	public void setTrening() throws SQLException, ParseException{
 		String query1 = "INSERT INTO TRENINGSOKT (TRENINGSOKTID, DATO, TIDSPUNKT, VARIGHET)" + "VALUES (?, ?, ?, ?)";
 		PreparedStatement prepStmt = myConn.prepareStatement(query1);
@@ -94,20 +108,10 @@ public class Dagbok {
 
 
 
-	public void getTrening() throws SQLException {
-			query("select * from TRENINGSOKT");
-			//Når myResult har en neste, print ut PERSINID og PERSONLIGFORM
-			while (myRs.next()) {
-				System.out.println("TreningsID: " + myRs.getString("TRENINGSOKTID") + "  Dato: " + myRs.getString("DATO") + "  Tidspunkt: " + myRs.getString("TIDSPUNKT") + "  Varighet: " + myRs.getString("VARIGHET"));
-			}
-		}
-
-
-
 
 	public void setOvelse() throws SQLException{
 		
-		String query1 = "INSERT INTO OVELSE (OVELSESTITTEL, PERSFORM, BESKRIVELSE, TYPE_TRENING, BELASTNING, ANTALL_REPETISJONER, ANTALL_SETT, VARIGHET)" + "VALUES (?,?,?,?,?,?,?,?)";
+		String query1 = "INSERT INTO OVELSE (OVELSESTITTEL, PERSFORM, BESKRIVELSE, TYPE_TRENING, BELASTNING, ANTALL_REPETISJONER, ANTALL_SETT, VARIGHET, OVELSEID)" + "VALUES (?,?,?,?,?,?,?,?,?)";
 		PreparedStatement stat1 = myConn.prepareStatement(query1);
 		
 		//query("select TRENINGSOKTID from TRENINGSOKT);"
@@ -139,6 +143,7 @@ public class Dagbok {
 		stat1.setString(6, ant_rep);
 		stat1.setString(7, ant_set);
 		stat1.setString(8, varighet);
+		stat1.setInt(9, getLastId());
 		
 		stat1.executeUpdate();
 		
@@ -166,13 +171,29 @@ public class Dagbok {
 		 * Lager statements som matcher øvelseNavn i database
 		 */
 	}
+	
+	public void getTrening() throws SQLException {
+		System.out.println("Skriv inn dato ");
+		String DT = in.next();
+		query("SELECT * FROM TRENINGSOKT AS T INNER JOIN OVELSE AS O ON (T.TRENINGSOKTID = O.OVELSEID) WHERE DATO='" + DT + "' AND (O.OVELSEID = T.TRENINGSOKTID)");
 
+		if(myRs.next()) {
+			System.out.println("Treningsokt id" + myRs.getString("TRENINGSOKTID") + "  Dato: " + myRs.getString("DATO") + "  Tidspunkt: " + myRs.getString("TIDSPUNKT") + "  Varighet: " + myRs.getString("VARIGHET"));
+			System.out.println("Øvelseid:" + myRs.getString("OVELSEID") + " Øvelse navn: " + myRs.getString("OVELSESTITTEL") + "  Beskrivelse: " + myRs.getString("BESKRIVELSE") + "  Type trening: " + myRs.getString("TYPE_TRENING"));
+
+		}
+		while (myRs.next()) {
+			System.out.println("Øvelseid:" + myRs.getString("OVELSEID") + " Øvelse navn: " + myRs.getString("OVELSESTITTEL") + "  Beskrivelse: " + myRs.getString("BESKRIVELSE") + "  Type trening: " + myRs.getString("TYPE_TRENING"));
+			
+		}
+	}
 	
 	
 	public static void main(String[] args) throws SQLException, ParseException {
 		Dagbok d = new Dagbok();
 		d.setTrening();
-		d.getTrening();
 		d.setOvelse();
+		d.setOvelse();
+		d.getTrening();
 	}
 }
