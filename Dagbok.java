@@ -47,7 +47,7 @@ public class Dagbok {
 	}
 	
 
-	public int setId() throws SQLException {
+	public int setTreningId() throws SQLException {
 
 		query("select max(TRENINGSOKTID) from TRENINGSOKT");
 		int id = 0;
@@ -71,6 +71,20 @@ public class Dagbok {
 			
 			int id2 = Integer.parseInt(s);
 			id += id2;
+		}
+		return id;
+	}
+	
+	public int setOvelseId() throws SQLException {
+
+		query("select max(OID) from OVELSE");
+		int id = 0;
+		
+		while (myRs.next()) {
+			String s = myRs.getString(1);
+			
+			int id2 = Integer.parseInt(s);
+			id += id2 + 1;
 		}
 		return id;
 	}
@@ -119,7 +133,7 @@ public class Dagbok {
 		int varighet = in.nextInt();
 		
 		
-		prepStmt.setInt(1, setId());
+		prepStmt.setInt(1, setTreningId());
 		prepStmt.setDate(2, sqlDato);
 		prepStmt.setTime(3, sqlTid);
 		prepStmt.setInt(4, varighet);
@@ -139,7 +153,7 @@ public class Dagbok {
 
 	public void setOvelse() throws SQLException{
 		
-		String query1 = "INSERT INTO OVELSE (OVELSESTITTEL, PERSFORM, BESKRIVELSE, TYPE_TRENING, BELASTNING, ANTALL_REPETISJONER, ANTALL_SETT, VARIGHET, OVELSEID, GOAL, RESULTAT, NOTAT)" + "VALUES (?,?,?,?,?,?,?,?,?,?,?,?)";
+		String query1 = "INSERT INTO OVELSE (OID, OVELSESTITTEL, PERSFORM, BESKRIVELSE, TYPE_TRENING, BELASTNING, ANTALL_REPETISJONER, ANTALL_SETT, VARIGHET, OVELSEID, GOAL, RESULTAT, NOTAT)" + "VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)";
 		PreparedStatement stat1 = myConn.prepareStatement(query1);
 		
 		//query("select TRENINGSOKTID from TRENINGSOKT);"
@@ -169,19 +183,19 @@ public class Dagbok {
 		System.out.println("Øvelse lagt til!");
 	
 		
-	
-		stat1.setString(1,tittel);
-		stat1.setString(2, persForm);
-		stat1.setString(3, beskrivelse);
-		stat1.setString(4, typeTrening);
-		stat1.setString(5, belastning);
-		stat1.setString(6, ant_rep);
-		stat1.setString(7, ant_set);
-		stat1.setString(8, varighet);
-		stat1.setInt(9, getLastId());
-		stat1.setString(10, goal);
-		stat1.setString(11, resultat);
-		stat1.setString(12, notat);
+		stat1.setInt(1, setOvelseId());
+		stat1.setString(2,tittel);
+		stat1.setString(3, persForm);
+		stat1.setString(4, beskrivelse);
+		stat1.setString(5, typeTrening);
+		stat1.setString(6, belastning);
+		stat1.setString(7, ant_rep);
+		stat1.setString(8, ant_set);
+		stat1.setString(9, varighet);
+		stat1.setInt(10, getLastId());
+		stat1.setString(11, goal);
+		stat1.setString(12, resultat);
+		stat1.setString(13, notat);
 		
 		stat1.executeUpdate();
 		
@@ -230,9 +244,6 @@ public class Dagbok {
 	
 	public static void main(String[] args) throws SQLException, ParseException {
 		Dagbok d = new Dagbok();
-		d.setTrening();
 		d.setOvelse();
-		d.setOvelse();
-		d.getTrening();
 	}
 }
