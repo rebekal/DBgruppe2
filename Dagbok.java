@@ -1,4 +1,4 @@
-package database;
+package oddrunp;
 
 import java.sql.*;
 import java.text.*;
@@ -11,8 +11,10 @@ public class Dagbok {
 	Connection myConn;
 	Statement myStmt;
 	ResultSet myRs;
-	Scanner in = new Scanner(System.in);
-	Scanner in2 = new Scanner(System.in);
+	Scanner inint = new Scanner(System.in);
+	Scanner instring = new Scanner(System.in);
+	Scanner in3 = new Scanner(System.in);
+	Scanner in4 = new Scanner(System.in);
 	
 	public Dagbok(){
 		
@@ -101,25 +103,25 @@ public class Dagbok {
 		
 		
 		System.out.println("Sett dato (YYYY-MM-DD): ");
-		String datoIn = in.next();
+		String datoIn = instring.next();
 		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
         Date parsed = format.parse(datoIn);
         java.sql.Date sqlDato = new java.sql.Date(parsed.getTime());
 	    
 		System.out.println("Sett tidspunkt (HH:MM:SS) : ");
-		String tidIn = in.next();
+		String tidIn = instring.next();
 		SimpleDateFormat format2 = new SimpleDateFormat("HH:mm:ss");
         long parsed2 = format2.parse(tidIn).getTime();
         java.sql.Time sqlTid = new java.sql.Time(parsed2);
 		
         System.out.println("Trente du inne eller ute? ");
-		String sted = in.next();
+		String sted = instring.next();
 		
 		if(sted.equalsIgnoreCase("inne")) {
 			System.out.println("Hvor mange tilskuere var der? ");
-			tilskuer += in.nextInt();
+			tilskuer += inint.nextInt();
 			System.out.println("Hvordan var luftkvaliteten? ");
-			luft += in.next();
+			luft += instring.next();
 			
 			prepStmt.setInt(6, tilskuer);
 			prepStmt.setString(5, luft);
@@ -127,13 +129,13 @@ public class Dagbok {
 	
 		if(sted.equalsIgnoreCase("ute")) {
 			System.out.println("Hvordan var vaeret? ");
-			vaer += in.next();
+			vaer += instring.next();
 			
 			prepStmt.setString(8, vaer);
 		}
         
 		System.out.println("Hvor lenge trente du (I hele timer)?");
-		int varighet = in.nextInt();
+		int varighet = inint.nextInt();
 		
 		
 		prepStmt.setInt(1, setTreningId());
@@ -163,7 +165,7 @@ public class Dagbok {
 				System.out.println(" - " + myRs.getString("OVELSESTITTEL"));
 			}
 				
-		    String ovelse = in.next();
+		    String ovelse = instring.next();
 		        
 		    //Sjekker at brukeren velger en eksisterende ovelse
 		    query("SELECT COUNT(*) AS total FROM OVELSE WHERE OVELSESTITTEL ='" + ovelse + "'");
@@ -178,7 +180,7 @@ public class Dagbok {
 		    }
 		       
 		    System.out.println("Skriv inn m�let for ovelsen:");
-		    String mal = in2.nextLine();
+		    String mal = instring.nextLine();
 		        
 		
 		    query("SELECT * FROM OVELSE WHERE OVELSESTITTEL ='" + ovelse + "'");
@@ -191,8 +193,6 @@ public class Dagbok {
 			        	//Hvis det allerede finnes et mal, skal det legges til i malhistorikk
 			        	String updategoal = "UPDATE OVELSE SET GOAL = ? WHERE OVELSESTITTEL = ?";
 			        	java.sql.PreparedStatement stmt = myConn.prepareStatement(updategoal);
-			
-			        	
 			        	
 			        	stmt.setString(1, mal);
 			        	stmt.setString(2, ovelse);
@@ -200,7 +200,6 @@ public class Dagbok {
 			            stmt.executeUpdate();
 			        	
 			        	System.out.println("Mal er lagt til!");
-			        	
 			        	
 			        	System.out.println("Mal for ovelse er oppdatert!");
 			        	query("SELECT * FROM OVELSE WHERE OVELSESTITTEL ='" + ovelse + "'");
@@ -244,7 +243,7 @@ public class Dagbok {
 		        
 			}
 		        System.out.println("For � legge til et nytt mal, tast 1. For � avslutte, tast hvilken som helt knapp");
-		        int fortsett = in.nextInt();
+		        int fortsett = inint.nextInt();
 		        if(fortsett == 1){
 		        	continue;
 		        }
@@ -269,41 +268,39 @@ public class Dagbok {
 		//query("select TRENINGSOKTID from TRENINGSOKT);"
 		//String treningsoktid = 
 		System.out.println("Skriv inn Øvelsetittel: ");
-		String tittel = in.next();
+		String tittel = instring.next();
 		System.out.println("Skriv inn personlig form: ");
-		String persForm = in.next();
+		int persForm = inint.nextInt();
 		System.out.println("Skriv inn beskrivelse av økten: ");
-		String beskrivelse = in.next();
+		String beskrivelse = in3.nextLine();
 		System.out.println("Skriv inn type trening her: ");
-		String typeTrening = in.next();
+		String typeTrening = in3.next();
 		System.out.println("Grad av belastning: ");
-		String belastning = in.next();
+		String belastning = instring.next();
 		System.out.println("Skriv inn antall repetisjoner: ");
-		String ant_rep = in.next();
+		int ant_rep = inint.nextInt();
 		System.out.println("Skriv inn antall sett: ");
-		String ant_set = in.next();
+		int ant_set = inint.nextInt();
 		System.out.println("Varigheten for øvelsen (i timer): ");
-		String varighet = in.next();
-		System.out.println("Målet ditt for øvelsen: ");
-		String goal = in.next();
+		float varighet = inint.nextFloat();
 		System.out.println("Skriv inn resultat: ");
-		String resultat = in.next();
+		String resultat = in4.nextLine();
 		System.out.println("Skriv inn notat / tips for øvelsen: ");
-		String notat = in.next();
+		String notat = in4.nextLine();
 		System.out.println("Øvelse lagt til!");
 	
 		
 		stat1.setInt(1, setOvelseId());
 		stat1.setString(2,tittel);
-		stat1.setString(3, persForm);
+		stat1.setInt(3, persForm);
 		stat1.setString(4, beskrivelse);
 		stat1.setString(5, typeTrening);
 		stat1.setString(6, belastning);
-		stat1.setString(7, ant_rep);
-		stat1.setString(8, ant_set);
-		stat1.setString(9, varighet);
+		stat1.setInt(7, ant_rep);
+		stat1.setInt(8, ant_set);
+		stat1.setFloat(9, varighet);
 		stat1.setInt(10, getLastId());
-		stat1.setString(11, goal);
+		stat1.setString(11, null);
 		stat1.setString(12, resultat);
 		stat1.setString(13, notat);
 		
@@ -319,12 +316,12 @@ public class Dagbok {
 		System.out.println("Dette er alle de tidligere øvelsene: ");
 		//Når myResult har en neste, print ut OVELSESTITTEL,BESKRIVELSE og TYPE_TRENING
 		while (myRs.next()) {
-			System.out.println("Øvelsestittel: " + myRs.getString("OVELSESTITTEL") + "Personlig Form: " + myRs.getString("PERSFORM") +  "Beskrivelse: " + myRs.getString("BESKRIVELSE") + "  Type trening: " + myRs.getString("TYPE_TRENING")+ "Belastning: " + myRs.getString("BELASTNING") + "Antall Repetisjoner: " + myRs.getString("ANTALL_REPETISJONER") + "Antall Sett: " + myRs.getString("ANTALL_SETT") + "Varighet: " + myRs.getString("VARIGHET") + "Mål: " + myRs.getString("GOAL") + "Resultat: " + myRs.getString("RESULTAT") + "Notat: " + myRs.getString("NOTAT"));
+			System.out.println("Øvelsestittel: " + myRs.getString("OVELSESTITTEL") + " - Personlig Form: " + myRs.getString("PERSFORM") +  " - Beskrivelse: " + myRs.getString("BESKRIVELSE") + " - Type trening: " + myRs.getString("TYPE_TRENING")+ " - Belastning: " + myRs.getString("BELASTNING") + " - Antall Repetisjoner: " + myRs.getString("ANTALL_REPETISJONER") + " - Antall Sett: " + myRs.getString("ANTALL_SETT") + " - Varighet: " + myRs.getString("VARIGHET") + " - Mål: " + myRs.getString("GOAL") + " - Resultat: " + myRs.getString("RESULTAT") + " - Notat: " + myRs.getString("NOTAT"));
 		}
 		
 		System.out.println(' ');
-		System.out.println("Hvilken øvelse vil du hente ut? (velg fra øvelsestitler i listen over): ");
-		String valgt = in.next();
+		System.out.println("Hvilken øvelse vil du hente ut? (velg ovelsestittler i listen over): ");
+		String valgt = instring.next();
 		query("select OVELSESTITTEL, PERSFORM, BESKRIVELSE, TYPE_TRENING, BELASTNING, ANTALL_REPETISJONER, ANTALL_SETT, VARIGHET, GOAL, RESULTAT, NOTAT  from OVELSE where OVELSESTITTEL ='" + valgt + "'");
 		while (myRs.next()){
 		System.out.println("Øvelsestittel: " + myRs.getString("OVELSESTITTEL") + "  Beskrivelse: " + myRs.getString("BESKRIVELSE") + "  Type trening: " + myRs.getString("TYPE_TRENING")+ "Belastning: " + myRs.getString("BELASTNING") + "Antall Repetisjoner: " + myRs.getString("ANTALL_REPETISJONER") + "Antall Sett: " + myRs.getString("ANTALL_SETT") + "Varighet: " + myRs.getString("VARIGHET") + "Mål: " + myRs.getString("GOAL") + "Resultat: " + myRs.getString("RESULTAT") + "Notat: " + myRs.getString("NOTAT"));
@@ -336,8 +333,27 @@ public class Dagbok {
 
 
 	public void getTrening() throws SQLException {
-		System.out.println("Skriv inn dato ");
-		String DT = in.next();
+		System.out.println("Velg dato: ");
+		query("select * from TRENINGSOKT");
+		while (myRs.next()){
+			System.out.println(" - " + myRs.getString("DATO"));
+		}
+		
+		while (true) {
+		String DT = instring.next();
+	    int dnr = 0;    
+	    //Sjekker at brukeren velger en eksisterende ovelse
+	    query("SELECT COUNT(*) AS total FROM TRENINGSOKT WHERE DATO ='" + DT + "'");   
+	    while (myRs.next()){
+	        dnr = myRs.getInt("total");
+	    }   
+	    if (dnr == 0){
+	        System.out.println("Den datoen finnes ikke i databasen, pr�v igjen:");
+	        continue;
+	    }
+		
+		
+		
 		query("SELECT * FROM TRENINGSOKT AS T INNER JOIN OVELSE AS O ON (T.TRENINGSOKTID = O.OVELSEID) WHERE DATO='" + DT + "' AND (O.OVELSEID = T.TRENINGSOKTID)");
 
 		if(myRs.next()) {
@@ -349,7 +365,9 @@ public class Dagbok {
 			System.out.println("Øvelseid:" + myRs.getString("OVELSEID") + " Øvelse navn: " + myRs.getString("OVELSESTITTEL") + "  Beskrivelse: " + myRs.getString("BESKRIVELSE") + "  Type trening: " + myRs.getString("TYPE_TRENING"));
 			
 		}
+		break;
 	}
+}
 	
 	
 	public static void main(String[] args) throws SQLException, ParseException {
