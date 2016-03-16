@@ -76,8 +76,12 @@ public class Dagbok {
 	}
 	
 	public void setTrening() throws SQLException, ParseException{
-		String query1 = "INSERT INTO TRENINGSOKT (TRENINGSOKTID, DATO, TIDSPUNKT, VARIGHET)" + "VALUES (?, ?, ?, ?)";
+		String query1 = "INSERT INTO TRENINGSOKT (TRENINGSOKTID, DATO, TIDSPUNKT, VARIGHET, LUFTKVALITET, ANTALL_TILSKUERE, STEDSTYPE, VAERFORHOLD)" + "VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
 		PreparedStatement prepStmt = myConn.prepareStatement(query1);
+		String luft = ""; 
+		String vaer = "";
+		int tilskuer = 0;
+		
 		
 		System.out.println("Sett dato (YYYY-MM-DD): ");
 		String datoIn = in.next();
@@ -91,7 +95,26 @@ public class Dagbok {
         long parsed2 = format2.parse(tidIn).getTime();
         java.sql.Time sqlTid = new java.sql.Time(parsed2);
 		
+        System.out.println("Trente du inne eller ute? ");
+		String sted = in.next();
 		
+		if(sted.equalsIgnoreCase("inne")) {
+			System.out.println("Hvor mange tilskuere var der? ");
+			tilskuer += in.nextInt();
+			System.out.println("Hvordan var luftkvaliteten? ");
+			luft += in.next();
+			
+			prepStmt.setInt(6, tilskuer);
+			prepStmt.setString(5, luft);
+		}
+	
+		if(sted.equalsIgnoreCase("ute")) {
+			System.out.println("Hvordan var vaeret? ");
+			vaer += in.next();
+			
+			prepStmt.setString(8, vaer);
+		}
+        
 		System.out.println("Hvor lenge trente du (I hele timer)?");
 		int varighet = in.nextInt();
 		
@@ -100,6 +123,11 @@ public class Dagbok {
 		prepStmt.setDate(2, sqlDato);
 		prepStmt.setTime(3, sqlTid);
 		prepStmt.setInt(4, varighet);
+		prepStmt.setString(5, luft);
+		prepStmt.setInt(6, tilskuer);
+		prepStmt.setString(7, sted);
+		prepStmt.setString(8, vaer);
+
 		
 		prepStmt.executeUpdate();
 		System.out.println("Treningsøkt lagt til!");
