@@ -111,7 +111,7 @@ public class Dagbok {
 
 	public void setOvelse() throws SQLException{
 		
-		String query1 = "INSERT INTO OVELSE (OVELSESTITTEL, PERSFORM, BESKRIVELSE, TYPE_TRENING, BELASTNING, ANTALL_REPETISJONER, ANTALL_SETT, VARIGHET, OVELSEID)" + "VALUES (?,?,?,?,?,?,?,?,?)";
+		String query1 = "INSERT INTO OVELSE (OVELSESTITTEL, PERSFORM, BESKRIVELSE, TYPE_TRENING, BELASTNING, ANTALL_REPETISJONER, ANTALL_SETT, VARIGHET, OVELSEID, GOAL, RESULTAT, NOTAT)" + "VALUES (?,?,?,?,?,?,?,?,?,?,?,?)";
 		PreparedStatement stat1 = myConn.prepareStatement(query1);
 		
 		//query("select TRENINGSOKTID from TRENINGSOKT);"
@@ -130,9 +130,16 @@ public class Dagbok {
 		String ant_rep = in.next();
 		System.out.println("Skriv inn antall sett: ");
 		String ant_set = in.next();
-		System.out.println("Skriv inn varigheten for øvelsen: ");
+		System.out.println("Varigheten for øvelsen (i timer): ");
 		String varighet = in.next();
+		System.out.println("Målet ditt for øvelsen: ");
+		String goal = in.next();
+		System.out.println("Skriv inn resultat: ");
+		String resultat = in.next();
+		System.out.println("Skriv inn notat / tips for øvelsen: ");
+		String notat = in.next();
 		System.out.println("Øvelse lagt til!");
+	
 		
 	
 		stat1.setString(1,tittel);
@@ -144,6 +151,9 @@ public class Dagbok {
 		stat1.setString(7, ant_set);
 		stat1.setString(8, varighet);
 		stat1.setInt(9, getLastId());
+		stat1.setString(10, goal);
+		stat1.setString(11, resultat);
+		stat1.setString(12, notat);
 		
 		stat1.executeUpdate();
 		
@@ -157,21 +167,22 @@ public class Dagbok {
 		System.out.println("Dette er alle de tidligere øvelsene: ");
 		//Når myResult har en neste, print ut OVELSESTITTEL,BESKRIVELSE og TYPE_TRENING
 		while (myRs.next()) {
-			System.out.println("Øvelsestittel: " + myRs.getString("OVELSESTITTEL") + "Personlig Form: " + myRs.getString("PERSFORM") +  "Beskrivelse: " + myRs.getString("BESKRIVELSE") + "  Type trening: " + myRs.getString("TYPE_TRENING")+ "Belastning: " + myRs.getString("BELASTNING") + "Antall Repetisjoner: " + myRs.getString("ANTALL_REPETISJONER") + "Antall Sett: " + myRs.getString("ANTALL_SETT") + "Varighet: " + myRs.getString("VARIGHET"));
+			System.out.println("Øvelsestittel: " + myRs.getString("OVELSESTITTEL") + "Personlig Form: " + myRs.getString("PERSFORM") +  "Beskrivelse: " + myRs.getString("BESKRIVELSE") + "  Type trening: " + myRs.getString("TYPE_TRENING")+ "Belastning: " + myRs.getString("BELASTNING") + "Antall Repetisjoner: " + myRs.getString("ANTALL_REPETISJONER") + "Antall Sett: " + myRs.getString("ANTALL_SETT") + "Varighet: " + myRs.getString("VARIGHET") + "Mål: " + myRs.getString("GOAL") + "Resultat: " + myRs.getString("RESULTAT") + "Notat: " + myRs.getString("NOTAT"));
 		}
 		
 		System.out.println(' ');
 		System.out.println("Hvilken øvelse vil du hente ut? (velg fra øvelsestitler i listen over): ");
 		String valgt = in.next();
-		query("select OVELSESTITTEL, PERSFORM, BESKRIVELSE, TYPE_TRENING, BELASTNING, ANTALL_REPETISJONER, ANTALL_SETT, VARIGHET  from OVELSE where OVELSESTITTEL ='" + valgt + "'");
+		query("select OVELSESTITTEL, PERSFORM, BESKRIVELSE, TYPE_TRENING, BELASTNING, ANTALL_REPETISJONER, ANTALL_SETT, VARIGHET, GOAL, RESULTAT, NOTAT  from OVELSE where OVELSESTITTEL ='" + valgt + "'");
 		while (myRs.next()){
-		System.out.println("Øvelsestittel: " + myRs.getString("OVELSESTITTEL") + "  Beskrivelse: " + myRs.getString("BESKRIVELSE") + "  Type trening: " + myRs.getString("TYPE_TRENING")+ "Belastning: " + myRs.getString("BELASTNING") + "Antall Repetisjoner: " + myRs.getString("ANTALL_REPETISJONER") + "Antall Sett: " + myRs.getString("ANTALL_SETT") + "Varighet: " + myRs.getString("VARIGHET"));
+		System.out.println("Øvelsestittel: " + myRs.getString("OVELSESTITTEL") + "  Beskrivelse: " + myRs.getString("BESKRIVELSE") + "  Type trening: " + myRs.getString("TYPE_TRENING")+ "Belastning: " + myRs.getString("BELASTNING") + "Antall Repetisjoner: " + myRs.getString("ANTALL_REPETISJONER") + "Antall Sett: " + myRs.getString("ANTALL_SETT") + "Varighet: " + myRs.getString("VARIGHET") + "Mål: " + myRs.getString("GOAL") + "Resultat: " + myRs.getString("RESULTAT") + "Notat: " + myRs.getString("NOTAT"));
 		}
 		/*
 		 * Lager statements som matcher øvelseNavn i database
 		 */
 	}
-	
+
+
 	public void getTrening() throws SQLException {
 		System.out.println("Skriv inn dato ");
 		String DT = in.next();
