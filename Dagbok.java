@@ -12,6 +12,7 @@ public class Dagbok {
 	Statement myStmt;
 	ResultSet myRs;
 	Scanner in = new Scanner(System.in);
+	Scanner in2 = new Scanner(System.in);
 	
 	public Dagbok(){
 		
@@ -176,7 +177,6 @@ public void setMal() throws SQLException{
         break;
     }
        
-        
         System.out.println("Skriv inn målet for ovelsen:");
         String mal = in2.nextLine();
         
@@ -203,7 +203,7 @@ public void setMal() throws SQLException{
         	System.out.println("Mal for ovelse er oppdatert!");
         	query("SELECT * FROM OVELSE WHERE OVELSESTITTEL ='" + ovelse + "'");
         	while (myRs.next()){
-        		System.out.println("Ovelse: " + myRs.getString("OVELSESTITTEL") + " - Mal: " + myRs.getString("GOAL"));
+        	System.out.println("Ovelse: " + myRs.getString("OVELSESTITTEL") + " - Mal: " + myRs.getString("GOAL"));
         
         }
        }
@@ -235,7 +235,7 @@ public void setMal() throws SQLException{
         System.out.println("Malet for ovelse er oppdatert");
         query("SELECT * FROM OVELSE WHERE OVELSESTITTEL ='" + ovelse + "'");
         while (myRs.next()){
-    		System.out.println("Ovelse: " + myRs.getString("OVELSESTITTEL") + " - Mal: " + myRs.getString("GOAL"));
+    	System.out.println("Ovelse: " + myRs.getString("OVELSESTITTEL") + " - Mal: " + myRs.getString("GOAL"));
     
         	}
         }  
@@ -257,7 +257,6 @@ public void setMal() throws SQLException{
 		System.out.println("Ovelse: " + myRs.getString("OVELSENAVN") + " - Mal: " + myRs.getString("MAL"));
 	}
 }
-
 
 
 	public void setOvelse() throws SQLException{
