@@ -94,7 +94,7 @@ public class Dagbok {
 	
 	public void setTrening() throws SQLException, ParseException{
 		String query1 = "INSERT INTO TRENINGSOKT (TRENINGSOKTID, DATO, TIDSPUNKT, VARIGHET, LUFTKVALITET, ANTALL_TILSKUERE, STEDSTYPE, VAERFORHOLD)" + "VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
-		PreparedStatement prepStmt = myConn.prepareStatement(query1);
+		java.sql.PreparedStatement prepStmt = myConn.prepareStatement(query1);
 		String luft = ""; 
 		String vaer = "";
 		int tilskuer = 0;
@@ -152,106 +152,106 @@ public class Dagbok {
 
 
 
-public void setMal() throws SQLException{
-		
+	public void setMal() throws SQLException{
 		while (true) {
-		int ovnr = 0;
+			int ovnr = 0;
+				
+			//Printer ut alle ovelse som kan velges
+			query("select * from OVELSE");
+		    System.out.println("Velg øvelse:");
+			while (myRs.next()){
+				System.out.println(" - " + myRs.getString("OVELSESTITTEL"));
+			}
+				
+		    String ovelse = in.next();
+		        
+		    //Sjekker at brukeren velger en eksisterende ovelse
+		    query("SELECT COUNT(*) AS total FROM OVELSE WHERE OVELSESTITTEL ='" + ovelse + "'");
+		        
+		    while (myRs.next()){
+		        ovnr = myRs.getInt("total");
+		    }
+		        
+		    if (ovnr == 0){
+		        System.out.println("Den øvelsen finnes ikke i databasen, legg til øvelse først.");
+		        break;
+		    }
+		       
+		    System.out.println("Skriv inn målet for ovelsen:");
+		    String mal = in2.nextLine();
+		        
 		
-		//Printer ut alle ovelse som kan velges
-		query("select * from OVELSE");
-        System.out.println("Velg øvelse:");
-		while (myRs.next()){
-			System.out.println(" - " + myRs.getString("OVELSESTITTEL"));
-		}
+		    query("SELECT * FROM OVELSE WHERE OVELSESTITTEL ='" + ovelse + "'");
+		        
+			    while (myRs.next()){
+			        
+			        	//Kode for hvis det ikke finnes et mal
+			    	if (myRs.getString("GOAL") == null){
+			        	
+			        	//Hvis det allerede finnes et mal, skal det legges til i malhistorikk
+			        	String updategoal = "UPDATE OVELSE SET GOAL = ? WHERE OVELSESTITTEL = ?";
+			        	java.sql.PreparedStatement stmt = myConn.prepareStatement(updategoal);
+			
+			        	
+			        	
+			        	stmt.setString(1, mal);
+			        	stmt.setString(2, ovelse);
+			            
+			            stmt.executeUpdate();
+			        	
+			        	System.out.println("Mal er lagt til!");
+			        	
+			        	
+			        	System.out.println("Mal for ovelse er oppdatert!");
+			        	query("SELECT * FROM OVELSE WHERE OVELSESTITTEL ='" + ovelse + "'");
+			        	while (myRs.next()){
+			        	System.out.println("Ovelse: " + myRs.getString("OVELSESTITTEL") + " - Mal: " + myRs.getString("GOAL"));
+			        
+			        }
+		       }
+		        
+		        //Kode for hvis det finnes et mal fra for av
+		        else{
 		
-        String ovelse = in.next();
-        
-        //Sjekker at brukeren velger en eksisterende ovelse
-        query("SELECT COUNT(*) AS total FROM OVELSE WHERE OVELSESTITTEL ='" + ovelse + "'");
-        while (myRs.next()){
-        	ovnr = myRs.getInt("total");
-        }
-        
-        if (ovnr == 0){
-        	System.out.println("Den øvelsen finnes ikke i databasen, legg til øvelse først.");
-        break;
-    }
-       
-        System.out.println("Skriv inn målet for ovelsen:");
-        String mal = in2.nextLine();
-        
-
-        query("SELECT * FROM OVELSE WHERE OVELSESTITTEL ='" + ovelse + "'");
-        
-        while (myRs.next()){
-        
-        	//Kode for hvis det ikke finnes et mal
-        if (myRs.getString("GOAL") == null){
-        	
-        	//Hvis det allerede finnes et mal, skal det legges til i malhistorikk
-        	String updategoal = "UPDATE OVELSE SET GOAL = ? WHERE OVELSESTITTEL = ?";
-        	PreparedStatement stmt = myConn.prepareStatement(updategoal);
-
-        	
-        	
-        	stmt.setString(1, mal);
-        	stmt.setString(2, ovelse);
-            
-            stmt.executeUpdate();
-        	
-        	System.out.println("Mal er lagt til!");
-        	
-        	
-        	System.out.println("Mal for ovelse er oppdatert!");
-        	query("SELECT * FROM OVELSE WHERE OVELSESTITTEL ='" + ovelse + "'");
-        	while (myRs.next()){
-        	System.out.println("Ovelse: " + myRs.getString("OVELSESTITTEL") + " - Mal: " + myRs.getString("GOAL"));
-        
-        }
-       }
-        
-        //Kode for hvis det finnes et mal fra for av
-        else{
-
-        //Malet blir lagt til i malhistorikk
-        String query1 = "INSERT INTO MALHISTORIKK (OVELSENAVN, MAL)" + "VALUES (?, ?)";
-        PreparedStatement prepStmt = myConn.prepareStatement(query1);
-        
-        prepStmt.setString(1, myRs.getString("OVELSESTITTEL"));	
-        prepStmt.setString(2, myRs.getString("GOAL"));
-        
-        prepStmt.executeUpdate();
-        
-        
-        System.out.println("Det gamle malet ble lagt til malhistorikken");
-        
-        //Det nye malet blir lagt til i ovelsetabellen
-        String updategoal = "UPDATE OVELSE SET GOAL = ? WHERE OVELSESTITTEL = ?";
-    	PreparedStatement stmt = myConn.prepareStatement(updategoal);
-    	
-    	stmt.setString(1, mal);
-    	stmt.setString(2, ovelse);
-        
-        stmt.executeUpdate();
-      
-        System.out.println("Malet for ovelse er oppdatert");
-        query("SELECT * FROM OVELSE WHERE OVELSESTITTEL ='" + ovelse + "'");
-        while (myRs.next()){
-    	System.out.println("Ovelse: " + myRs.getString("OVELSESTITTEL") + " - Mal: " + myRs.getString("GOAL"));
-    
-        	}
-        }  
-        
+		        //Malet blir lagt til i malhistorikk
+		        String query1 = "INSERT INTO MALHISTORIKK (OVELSENAVN, MAL)" + "VALUES (?, ?)";
+		        java.sql.PreparedStatement prepStmt = myConn.prepareStatement(query1);
+		        
+		        prepStmt.setString(1, myRs.getString("OVELSESTITTEL"));	
+		        prepStmt.setString(2, myRs.getString("GOAL"));
+		        
+		        prepStmt.executeUpdate();
+		        
+		        
+		        System.out.println("Det gamle malet ble lagt til malhistorikken");
+		        
+		        //Det nye malet blir lagt til i ovelsetabellen
+		        String updategoal = "UPDATE OVELSE SET GOAL = ? WHERE OVELSESTITTEL = ?";
+		    	java.sql.PreparedStatement stmt = myConn.prepareStatement(updategoal);
+		    	
+		    	stmt.setString(1, mal);
+		    	stmt.setString(2, ovelse);
+		        
+		        stmt.executeUpdate();
+		      
+		        System.out.println("Malet for ovelse er oppdatert");
+		        query("SELECT * FROM OVELSE WHERE OVELSESTITTEL ='" + ovelse + "'");
+		        while (myRs.next()){
+		    	System.out.println("Ovelse: " + myRs.getString("OVELSESTITTEL") + " - Mal: " + myRs.getString("GOAL"));
+		    
+		        	}
+		        }  
+		        
+			}
+		        System.out.println("For å legge til et nytt mal, tast 1. For å avslutte, tast hvilken som helt knapp");
+		        int fortsett = in.nextInt();
+		        if(fortsett == 1){
+		        	continue;
+		        }
+		        break;
+			}
+			
 	}
-        System.out.println("For å legge til et nytt mal, tast 1. For å avslutte, tast hvilken som helt knapp");
-        int fortsett = in.nextInt();
-        if(fortsett == 1){
-        	continue;
-        }
-        break;
-		}
-		
-}
 
 	public void getMalhistorikk() throws SQLException{
 		query("SELECT * FROM MALHISTORIKK");
@@ -264,7 +264,7 @@ public void setMal() throws SQLException{
 	public void setOvelse() throws SQLException{
 		
 		String query1 = "INSERT INTO OVELSE (OID, OVELSESTITTEL, PERSFORM, BESKRIVELSE, TYPE_TRENING, BELASTNING, ANTALL_REPETISJONER, ANTALL_SETT, VARIGHET, OVELSEID, GOAL, RESULTAT, NOTAT)" + "VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)";
-		PreparedStatement stat1 = myConn.prepareStatement(query1);
+		java.sql.PreparedStatement stat1 = myConn.prepareStatement(query1);
 		
 		//query("select TRENINGSOKTID from TRENINGSOKT);"
 		//String treningsoktid = 
