@@ -190,7 +190,9 @@ public void setMal() throws SQLException{
         	
         	//Hvis det allerede finnes et mal, skal det legges til i malhistorikk
         	String updategoal = "UPDATE OVELSE SET GOAL = ? WHERE OVELSESTITTEL = ?";
-        	PreparedStatement stmt = (PreparedStatement) myConn.prepareStatement(updategoal);
+        	PreparedStatement stmt = myConn.prepareStatement(updategoal);
+
+        	
         	
         	stmt.setString(1, mal);
         	stmt.setString(2, ovelse);
@@ -213,7 +215,7 @@ public void setMal() throws SQLException{
 
         //Malet blir lagt til i malhistorikk
         String query1 = "INSERT INTO MALHISTORIKK (OVELSENAVN, MAL)" + "VALUES (?, ?)";
-        PreparedStatement prepStmt = (PreparedStatement) myConn.prepareStatement(query1);
+        PreparedStatement prepStmt = myConn.prepareStatement(query1);
         
         prepStmt.setString(1, myRs.getString("OVELSESTITTEL"));	
         prepStmt.setString(2, myRs.getString("GOAL"));
@@ -225,7 +227,7 @@ public void setMal() throws SQLException{
         
         //Det nye malet blir lagt til i ovelsetabellen
         String updategoal = "UPDATE OVELSE SET GOAL = ? WHERE OVELSESTITTEL = ?";
-    	PreparedStatement stmt = (PreparedStatement) myConn.prepareStatement(updategoal);
+    	PreparedStatement stmt = myConn.prepareStatement(updategoal);
     	
     	stmt.setString(1, mal);
     	stmt.setString(2, ovelse);
@@ -352,6 +354,6 @@ public void setMal() throws SQLException{
 	
 	public static void main(String[] args) throws SQLException, ParseException {
 		Dagbok d = new Dagbok();
-		d.setOvelse();
+		d.setMal();
 	}
 }
