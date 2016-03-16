@@ -151,7 +151,6 @@ public class Dagbok {
 
 
 
-
 public void setMal() throws SQLException{
 		
 		while (true) {
@@ -251,6 +250,14 @@ public void setMal() throws SQLException{
 		}
 		
 }
+
+	public void getMalhistorikk() throws SQLException{
+		query("SELECT * FROM MALHISTORIKK");
+		while(myRs.next()){
+		System.out.println("Ovelse: " + myRs.getString("OVELSENAVN") + " - Mal: " + myRs.getString("MAL"));
+	}
+}
+
 
 
 	public void setOvelse() throws SQLException{
