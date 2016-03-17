@@ -1,4 +1,4 @@
-package database;
+package oddrunp;
 
 import java.sql.SQLException;
 import java.text.ParseException;
@@ -8,7 +8,7 @@ public class Main extends Dagbok {
 	
 	public static void main(String[] args) throws SQLException, ParseException {
 		Dagbok dagbok = new Dagbok();
-		
+		boolean fortsett = true;
 		Scanner input = new Scanner (System.in);
 		
 		System.out.println("\nVelkommen til din personlige treningsdagbok." + "\n\nKommandonummer: " +
@@ -17,9 +17,10 @@ public class Main extends Dagbok {
 							"\n3 : Legg til øvelse" +
 							"\n4 : Hent øvelse" + 
 							"\n5 : Sett mål for øvelse" +
-							"\n6 : Hent målhistorikk");
+							"\n6 : Hent målhistorikk"+
+							"\n0 : Exit");
 		
-		while (true) {
+		while (fortsett == true) {
 			System.out.println("\nSkriv kommandonummer her:");
 			String in = input.nextLine();
 			
@@ -48,7 +49,9 @@ public class Main extends Dagbok {
 				case "6":
 					dagbok.getMalhistorikk();
 					continue;
-				
+				case "0":
+					fortsett = false;
+				break;
 				default:
 					System.out.println("Kommandonummeret finnes ikke, skriv en fra menyen");
 					continue;
