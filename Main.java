@@ -28,6 +28,17 @@ public class Main extends Dagbok {
 				case "1":
 					dagbok.setTrening();
 					dagbok.setOvelse();
+					while (true){
+						System.out.println("Trykk 1 for aa legge til flere ovelser");
+						System.out.println("Trykk hvilket som helst annet siffer for aa fortsette");
+						int newovelse = input.nextInt();
+					if(newovelse == 1){
+						dagbok.setOvelse();
+					}
+					else{
+						break;
+					}
+					}
 					continue;
 					
 				case "2":
@@ -50,7 +61,7 @@ public class Main extends Dagbok {
 					dagbok.getMalhistorikk();
 					continue;
 				case "0":
-					System.out.println("Du er naa ute av programmet!");
+					System.out.println("du er naa ute av programmet");
 					fortsett = false;
 				break;
 				
