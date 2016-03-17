@@ -180,7 +180,7 @@ public class Dagbok {
 		    }
 		       
 		    System.out.println("Skriv inn målet for ovelsen:");
-		    String mal = instring.nextLine();
+		    String mal = in4.nextLine();
 		        
 		
 		    query("SELECT * FROM OVELSE WHERE OVELSESTITTEL ='" + ovelse + "'");
@@ -242,7 +242,7 @@ public class Dagbok {
 		        }  
 		        
 			}
-		        System.out.println("For å legge til et nytt mal, tast 1. For å avslutte, tast hvilken som helt knapp");
+		        System.out.println("For å legge til et nytt mal, tast 1. For å avslutte, tast et annet siffer");
 		        int fortsett = inint.nextInt();
 		        if(fortsett == 1){
 		        	continue;
