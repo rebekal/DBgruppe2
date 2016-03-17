@@ -320,9 +320,10 @@ public class Dagbok {
 		}
 		
 		System.out.println(' ');
-		System.out.println("Hvilken øvelse vil du hente ut? (velg ovelsestittler i listen over): ");
-		String valgt = instring.next();
-		query("select OVELSESTITTEL, PERSFORM, BESKRIVELSE, TYPE_TRENING, BELASTNING, ANTALL_REPETISJONER, ANTALL_SETT, VARIGHET, GOAL, RESULTAT, NOTAT  from OVELSE where OVELSESTITTEL ='" + valgt + "'");
+		System.out.println("Hvilken øvelse vil du hente ut? (velg fra øvelsestitler i listen over): ");
+		String valgt = in.next();
+		query("select OVELSESTITTEL from OVELSE where OVELSESTITTEL ='" + valgt + "'");
+
 		while (myRs.next()){
 		System.out.println("Øvelsestittel: " + myRs.getString("OVELSESTITTEL") + "  Beskrivelse: " + myRs.getString("BESKRIVELSE") + "  Type trening: " + myRs.getString("TYPE_TRENING")+ "Belastning: " + myRs.getString("BELASTNING") + "Antall Repetisjoner: " + myRs.getString("ANTALL_REPETISJONER") + "Antall Sett: " + myRs.getString("ANTALL_SETT") + "Varighet: " + myRs.getString("VARIGHET") + "Mål: " + myRs.getString("GOAL") + "Resultat: " + myRs.getString("RESULTAT") + "Notat: " + myRs.getString("NOTAT"));
 		}
@@ -330,7 +331,6 @@ public class Dagbok {
 		 * Lager statements som matcher øvelseNavn i database
 		 */
 	}
-
 
 	public void getTrening() throws SQLException {
 		System.out.println("Velg dato: ");
