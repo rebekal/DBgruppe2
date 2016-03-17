@@ -50,8 +50,10 @@ public class Main extends Dagbok {
 					dagbok.getMalhistorikk();
 					continue;
 				case "0":
+					System.out.println("Du er naa ute av programmet!");
 					fortsett = false;
 				break;
+				
 				default:
 					System.out.println("Kommandonummeret finnes ikke, skriv en fra menyen");
 					continue;

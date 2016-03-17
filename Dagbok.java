@@ -316,13 +316,13 @@ public class Dagbok {
 		System.out.println("Dette er alle de tidligere øvelsene: ");
 		//Når myResult har en neste, print ut OVELSESTITTEL,BESKRIVELSE og TYPE_TRENING
 		while (myRs.next()) {
-			System.out.println("Øvelsestittel: " + myRs.getString("OVELSESTITTEL") + " - Personlig Form: " + myRs.getString("PERSFORM") +  " - Beskrivelse: " + myRs.getString("BESKRIVELSE") + " - Type trening: " + myRs.getString("TYPE_TRENING")+ " - Belastning: " + myRs.getString("BELASTNING") + " - Antall Repetisjoner: " + myRs.getString("ANTALL_REPETISJONER") + " - Antall Sett: " + myRs.getString("ANTALL_SETT") + " - Varighet: " + myRs.getString("VARIGHET") + " - Mål: " + myRs.getString("GOAL") + " - Resultat: " + myRs.getString("RESULTAT") + " - Notat: " + myRs.getString("NOTAT"));
+			System.out.println("Øvelsestittel: " + myRs.getString("OVELSESTITTEL"));
 		}
 		
 		System.out.println(' ');
 		System.out.println("Hvilken øvelse vil du hente ut? (velg fra øvelsestitler i listen over): ");
-		String valgt = in.next();
-		query("select OVELSESTITTEL from OVELSE where OVELSESTITTEL ='" + valgt + "'");
+		String valgt = instring.next();
+		query("select * from OVELSE where OVELSESTITTEL ='" + valgt + "'");
 
 		while (myRs.next()){
 		System.out.println("Øvelsestittel: " + myRs.getString("OVELSESTITTEL") + "  Beskrivelse: " + myRs.getString("BESKRIVELSE") + "  Type trening: " + myRs.getString("TYPE_TRENING")+ "Belastning: " + myRs.getString("BELASTNING") + "Antall Repetisjoner: " + myRs.getString("ANTALL_REPETISJONER") + "Antall Sett: " + myRs.getString("ANTALL_SETT") + "Varighet: " + myRs.getString("VARIGHET") + "Mål: " + myRs.getString("GOAL") + "Resultat: " + myRs.getString("RESULTAT") + "Notat: " + myRs.getString("NOTAT"));
@@ -362,7 +362,7 @@ public class Dagbok {
 
 		}
 		while (myRs.next()) {
-			System.out.println("Øvelseid:" + myRs.getString("OVELSEID") + " Øvelse navn: " + myRs.getString("OVELSESTITTEL") + "  Beskrivelse: " + myRs.getString("BESKRIVELSE") + "  Type trening: " + myRs.getString("TYPE_TRENING"));
+			System.out.println(" Øvelse navn: " + myRs.getString("OVELSESTITTEL") + "  Beskrivelse: " + myRs.getString("BESKRIVELSE") + "  Type trening: " + myRs.getString("TYPE_TRENING"));
 			
 		}
 		break;
